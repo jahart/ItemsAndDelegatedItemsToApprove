@@ -67,10 +67,10 @@ private class ItemsAndDelegatedItemsToApproveTest {
     //  cover sharing work item!
     ItemsAndDelegatedItemsToApprove.AuraResult result = ItemsAndDelegatedItemsToApprove.shareApprovalTargetRecordWithMe(null);
 
-    // !! manully cover calling the sharing extension
+    // !! cover calling the sharing extension
     Object sharedSobj1 =  ItemsAndDelegatedItemsToApprove.runSharingExtension(account.id,UserInfo.getUserId());
 
-    // !! manuaally cover  with a configured extension!
+    // !! cover with a configured extension!
     Database.insert(new Items_And_Delegated_Items_Settings__c(Sharing_Extension__c = 'ItemsAndDelegatedItemsToApprove.DefaultSharingExtension'));
     Object sharedSobj3 =  ItemsAndDelegatedItemsToApprove.runSharingExtension(UserInfo.getUserId(), adminUser.Id);
 
@@ -98,7 +98,7 @@ private class ItemsAndDelegatedItemsToApproveTest {
     test.stopTest();
   }
 
-  // Stub up a manully created process instance work item to cover building wrappers
+  // Stub up a process instance work item to build wrappers
   private static ProcessInstanceWorkItem[] stubManualWorkItems () {
     //  pi work item 1
     ProcessInstance pi1 = new ProcessInstance();
