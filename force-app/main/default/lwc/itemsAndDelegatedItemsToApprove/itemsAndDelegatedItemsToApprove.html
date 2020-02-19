@@ -1,0 +1,467 @@
+<template>
+  <!--
+		Template for home page component
+	-->
+  <template if:true={isHomePageComponent}>
+    <lightning-card>
+      <div slot="title">
+        <div class="slds-media slds-p-bottom_xx-small ">
+          <div class="slds-media__figure" style="margin-right:0;">
+            <!-- cld! penguin! -->
+            <div class="ccontainer" style="width:3rem">
+              <img src={cldPenguinUrl} style="max-height:40px">
+            </div>
+          </div>
+          <div class="slds-media__body slds-grid">
+            <div class="slds-col slds-p-top_xx-small">
+              <span
+                title={label.Items_and_Delegated_Items_to_Approve}>{label.Items_and_Delegated_Items_to_Approve}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--
+				list the items to approve in the card body
+			-->
+      <div class="slds-card__body slds-card__body_inner slds-is-relative">
+        <lightning-spinner alternative-text="Loading" size="medium" variant="brand" if:true={showModalWindowSpinner}>
+        </lightning-spinner>
+
+        <template if:false={itemsToApprove}>
+          <template if:true={itemsFetched}>
+            <div class="slds-p-bottom_medium slds-m-left_large slds-text-body_small">
+              {label.No_approval_requests_need_your_attention_right_now}
+            </div>
+          </template>
+        </template>
+
+        <ul class="pendingApprovalCardList">
+          <li
+            class="pending-approval-card-row slds-tile slds-hint-parent runtime_approval_processPendingApprovalCardRow"
+            for:each={itemsToApprove} for:item="item" key={item.workItemId} for:index="index">
+
+            <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+              <h3 class="slds-truncate">
+                <!-- <a href={item.workItemHref} title={item.relatedToName}>{item.relatedToName}</a> -->
+                <a onclick={handleMobileActionClick} data-work-item-id={item.workItemId} data-is-delegated={item.isDelegated}>
+                  {item.relatedToName}
+                </a>
+              </h3>
+              <div class="pending-approval-card-row-menu uiMenu">
+                <div class="uiPopupTrigger">
+                  <!-- actions per item to approve! -->
+                  <lightning-button-menu slot="actions" menu-alignment="auto" variant="bare"
+                    class="slds-border_top slds-border_bottom slds-border_left slds-border_right">
+                    <!--
+											approve
+										-->
+                    <lightning-menu-item value="approve" label={label.Approve} onclick={handleApprovalAction}
+                      data-work-item-id={item.workItemId}></lightning-menu-item>
+                    <!--
+											reject
+										-->
+                    <lightning-menu-item value="reject" label={label.Reject} onclick={handleApprovalAction}
+                      data-work-item-id={item.workItemId}></lightning-menu-item>
+                    <!--
+											reassign ???
+										-->
+                    <!-- <lightning-menu-item value="reassign" label="Reassign" onclick={handleApprovalAction} data-work-item-id={item.workItemId}></lightning-menu-item> -->
+                    <!-- <lightning-menu-item value="reassign" label="Reassign" href={item.workItemHref}></lightning-menu-item> -->
+                  </lightning-button-menu>
+                </div>
+              </div>
+            </div>
+            <div class="pending-approval-card-row-detail slds-tile__detail slds-text-body--small">
+              <ul class="slds-list--horizontal slds-has-dividers--right slds-dropdown_actions">
+                <li class="slds-item">{item.sobjectType}</li>
+                <li class="slds-item" if:true={item.submittedByName}>{label.Submitted_By}&nbsp;{item.submittedByName}
+                </li>
+                <li class="slds-item" if:true={item.delegatedHelptext}>
+                  <lightning-helptext content={item.delegatedHelptext}></lightning-helptext>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div slot="footer">
+        <div class="slds-text-align_center">
+          <!-- link to flexipage to render all??  should this be a property? -->
+          <a href={viewAllFlexipageUrl}>
+            {label.View_All_Items_and_Delegated_Items}
+          </a>
+        </div>
+      </div>
+    </lightning-card>
+  </template>
+  <!--
+		end isHomePageComponent
+  -->
+
+  <template if:true={isMobilePageComponent}>
+    <div class="xslds-theme_default slds-p-around_medium slds-border_bottom">
+      <lightning-spinner alternative-text="Loading" size="medium" variant="brand" if:true={showModalWindowSpinner}>
+      </lightning-spinner>
+      <div class="slds-media xslds-p-bottom_xx-small">
+        <div class="slds-media__figure" style="margin-right:0;">
+          <div class="ccontainer" style="width:3rem">
+            <img src={cldPenguinUrl} style="max-height:40px">
+          </div>
+        </div>
+        <div class="slds-media__body slds-grid">
+          <div class="slds-col slds-text-heading_small">
+            <span title={label.Items_and_Delegated_Items_to_Approve}>{label.Items_and_Delegated_Items_to_Approve}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="pendingApprovalCardList">
+      <li class="slds-tile slds-hint-parent slds-theme_default slds-p-around_small slds-m-left_small"
+        for:each={itemsToApprove} for:item="item" key={item.workItemId} for:index="index">
+
+        <div onclick={handleMobileActionClick} data-work-item-id={item.workItemId} data-is-delegated={item.isDelegated}>
+
+          <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+            <h3 class="slds-truncate">
+              {item.relatedToName}
+            </h3>
+          </div>
+          <div class="pending-approval-card-row-detail slds-tile__detail slds-text-body--small">
+            <ul class="">
+              <li class="slds-item">
+                <div class="slds-grid">
+                  <div class="slds-col slds-size_1-of-3 slds-truncate">{label.Type}</div>
+                  <div class="slds-col  slds-truncate">{item.sobjectType}</div>
+                </div>
+              </li>
+              <li class="slds-item">
+                <div class="slds-grid">
+                  <div class="slds-col slds-size_1-of-3 slds-truncate">{label.Submitted_By}</div>
+                  <div class="slds-col slds-truncate">{item.submittedByName}</div>
+                </div>
+              </li>
+              <li class="slds-item">
+                <div class="slds-grid">
+                  <div class="slds-col slds-size_1-of-3 slds-truncate">{label.Date_Submitted}</div>
+                  <div class="slds-col slds-truncate">
+                    <lightning-formatted-date-time value={item.dateSubmitted}>
+                    </lightning-formatted-date-time>
+                  </div>
+                </div>
+              </li>
+              <li class="slds-item" if:true={item.isDelegated}>
+                {label.Delegated_Item}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </template>
+
+  <!--
+		Template for DESKTOP! / FLEXIPAGE
+	-->
+  <template if:true={isFlexiPageComponent}>
+
+    <div class="slds-page-header flexipage-template slds-hide">
+      <div class="slds-media">
+        <div class="slds-media__figure" style="margin-right:-4px;margin-left:-15px;">
+
+          <!-- <lightning-icon icon-name="custom:custom90"></lightning-icon> -->
+          <img src={cldPenguinUrl} style="max-height:40px">
+
+        </div>
+        <div class="slds-media__body">
+          <div class="slds-grid">
+            <div class="slds-col slds-align-bottom">
+              <div class="slds-page-header__name">
+                <div class="slds-page-header__name-title">
+                  <h1>
+                    <span>{label.My_Approval_Requests}</span>
+                    <span class="slds-page-header__title slds-truncate"
+                      title={label.Items_and_Delegated_Items_to_Approve}>
+                      {label.Items_and_Delegated_Items_to_Approve}
+                    </span>
+                  </h1>
+                </div>
+              </div>
+            </div>
+            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+              <div class={approveRejectButtonGroupClass}>
+                <button class="slds-button slds-button_neutral" name="approve" onclick={handleSelectedRowAction}
+                  disabled={doesNotHaveSelectedRows}>
+                  {label.Approve}
+                </button>
+                <button class="slds-button slds-button_neutral" name="reject" onclick={handleSelectedRowAction}
+                  disabled={doesNotHaveSelectedRows}>
+                  {label.Reject}
+                </button>
+              </div>
+
+              <div class="slds-button-group slds-p-left_xx-small">
+                <button class="slds-button x-slds-button_outline-brand" onclick={linkToStandardItemsToApprove}>
+                  {label.Standard_Items_To_Approve}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-grid">
+        <div class="slds-col slds-align-bottom">
+          <p class="slds-text-body_small">
+
+            <span if:false={hideMultipleCheckColumn}>
+              <span class="slds-m-right_small approve-reject-link slds-theme_success"
+                if:false={doesNotHaveSelectedRows}>
+                <a name="approve" onclick={handleSelectedRowAction}>
+                  <lightning-icon variant="inverse" size="xx-small" icon-name="utility:check"></lightning-icon>
+                  {label.Approve} {label.Items}
+                </a>
+              </span>
+              <span class="slds-m-right_medium approve-reject-link slds-theme_error" if:false={doesNotHaveSelectedRows}>
+                <a name="reject" onclick={handleSelectedRowAction}>
+                  <lightning-icon variant="inverse" size="xx-small" icon-name="utility:close"></lightning-icon>
+                  {label.Reject} {label.Items}
+                </a>
+              </span>
+            </span>
+
+            <!-- when no items listed -->
+            <span if:false={filteredItemsToApprove}>
+              {label.Refresh_to_view_the_latest_data}
+            </span>
+
+            <!-- render number of items listed and sorted field -->
+            <span if:true={filteredItemsToApprove}>
+              {filteredItemsToApprove.length} {label.Items}
+              <span class="slds-m-left_small" if:true={filteredItemsSortedByLabel}>
+                * {label.Sorted_By}
+                {filteredItemsSortedByLabel}
+              </span>
+            </span>
+          </p>
+        </div>
+
+        <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+
+          <div class="slds-p-right_x-small">
+            <lightning-input type="search" placeholder={label.Type_to_filter_items} class="filter-items-text"
+              value={filterItemsTextValue} variant="label-hidden" onchange={handleFilterItemsTextChange}>
+            </lightning-input>
+          </div>
+          <div class="button-icon-group">
+            <button class="slds-button slds-button_icon slds-button_icon-border-filled" onclick={fetchRecordsToApprove}>
+              <lightning-icon size="xx-small" icon-name="utility:refresh"></lightning-icon>
+            </button>
+
+            <button class={columnPanelButtonClass} onclick={toggleColumnPanel}>
+              <template if:true={renderSideBarColumns}>
+                <lightning-icon size="xx-small" icon-name="utility:settings" variant="inverse"></lightning-icon>
+              </template>
+              <template if:false={renderSideBarColumns}>
+                <lightning-icon size="xx-small" icon-name="utility:settings"></lightning-icon>
+              </template>
+            </button>
+
+            <button class={filterPanelButtonClass} onclick={toggleFilterPanel}>
+              <template if:true={renderSideBarFilter}>
+                <lightning-icon size="xx-small" icon-name="utility:filterList" variant="inverse"></lightning-icon>
+              </template>
+              <template if:false={renderSideBarFilter}>
+                <lightning-icon size="xx-small" icon-name="utility:filterList"></lightning-icon>
+              </template>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="slds-theme_default slds-grid listDisplays safari-workaround-anchor slds-border_right slds-border_left slds-is-relative">
+
+      <span class="">
+        <lightning-spinner alternative-text="Loading" size="large" variant="brand"
+          if:true={lightningDatatableIsLoading}>
+        </lightning-spinner>
+      </span>
+
+      <div class="slds-grid listViewContainer safari-workaround">
+        <!--
+          datatable
+				-->
+        <div class="slds-col slds-no-space forceListViewManagerPrimaryDisplayManager">
+
+          <div class="datatable-container">
+            <lightning-datatable show-row-number-column hide-checkbox-column={hideMultipleCheckColumn}
+              key-field="workItemId" class="appoval-datatable-container" data={filteredItemsToApprove}
+              columns={lightningDatatableApprovalColumns} sorted-by={filteredItemsSortedBy}
+              sorted-direction={filteredItemsSortedDirection} onsort={handleFilteredItemsSort}
+              onrowaction={handleFilteredItemsRowAction} onrowselection={handleRowSelection}
+              selected-rows={initialSelectedRows}>
+            </lightning-datatable>
+
+
+            <template if:false={itemsToApprove}>
+              <template if:true={itemsFetched}>
+                <div class="emptyContent" tabindex="-1">
+                  <div class="emptyContentInner">
+                    <p>{label.No_approval_requests_need_your_attention_right_now}</p>
+                  </div>
+                </div>
+              </template>
+            </template>
+
+          </div>
+
+        </div>
+        <!--
+					side bar!
+				-->
+        <div class="slds-grid slds-no-flex forceListViewManagerSecondaryDisplayManager" if:true={renderSideBar}>
+
+          <!--
+					 panel for filter!
+					-->
+          <div
+            class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-grid slds-grid_vertical forceFilterPanel"
+            if:true={renderSideBarFilter}>
+            <div class="slds-panel__header panelHeader">
+              <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate">{label.Filters}</h2>
+              <button onclick={toggleFilterPanel} class="slds-button slds-button_icon slds-button_icon-x-small"
+                title={label.Close}>
+                <lightning-icon size="x-small" icon-name="utility:close" alternative-text={label.Close}>
+                </lightning-icon>
+              </button>
+            </div>
+            <div class="slds-panel__body">
+              <ol>
+                <li>
+                  <!-- show all  / view mine / view delegated! options-->
+                  <div class="slds-box xslds-theme_shade">
+                    <lightning-combobox name="filterItemsViewOptionVale" label={label.Show_Approval_Items}
+                      value={filterItemsViewOptionValue} options={filterItemsViewOptions}
+                      onchange={handleFilterItemsViewOptions}>
+                    </lightning-combobox>
+                  </div>
+                </li>
+
+                <li class="slds-m-top_medium" if:true={itemsToApprove}>
+                  <!-- show sobject types to sort by -->
+                  <div class="slds-box xslds-theme_shade">
+                    <lightning-combobox name="filterItemsByType" label={label.By_Type_To_Approve}
+                      value={filteredSobjectTypeValue} options={filterSobjectTypeOptions}
+                      onchange={handleFilterSobjectTypeChange}>
+                    </lightning-combobox>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <!--
+					 panel for columns / settings!
+					-->
+          <div
+            class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-grid slds-grid_vertical forceFilterPanel"
+            if:true={renderSideBarColumns}>
+            <div class="slds-panel__header panelHeader">
+              <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate">{label.Fields}</h2>
+              <button onclick={toggleColumnPanel} class="slds-button slds-button_icon slds-button_icon-x-small"
+                title={label.Close}>
+                <lightning-icon size="x-small" icon-name="utility:close" alternative-text={label.Close}>
+                </lightning-icon>
+              </button>
+            </div>
+            <div class="slds-panel__body slds-scrollable">
+              <ol class="xx-slds-drop-zone">
+                <li class="slds-p-around_xx-small slds-theme_shade slds-border_bottom">
+                  <div class="slds-grid">
+                    <div class="slds-col slds-m-left_xx-small heading-text-caps slds-border_right">
+                      {label.Drag_and_Drop_to_Order}
+                    </div>
+                    <div class="slds-col slds-text-align_right slds-m-right_small heading-text-caps">
+                      {label.Check_to_Include_Fields}
+                    </div>
+                  </div>
+                </li>
+                <li for:each={columnsListToRender} class="slds-box cursor-move" for:item="field" key={field.label}
+                  for:index="index" ondrop={onColumnFieldDrop} ondragover={onColumnFieldAllowDrop}
+                  ondragleave={onColumnFieldDragLeave} ondragend={onColumnFieldDragEnd} draggable="true"
+                  ondragstart={onColumnFieldDragStart} data-drag-index={index}>
+                  <div class="slds-grid">
+                    <div class="slds-col">
+                      {field.label}
+                    </div>
+                    <div class="slds-text-align_right slds-m-right_small">
+                      <lightning-input type="checkbox" name={field.label} value={field.include} checked={field.include}
+                        onchange={handleIncludeCheckbox}></lightning-input>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!--
+		approve / reject modal!
+	-->
+  <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" if:true={showApprovalModal}>
+    <div class="slds-modal__container">
+      <header class="slds-modal__header">
+        <!-- render header close button -->
+        <button onclick={closeApprovalWindow}
+          class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title={label.Close}>
+          <lightning-icon size="small" icon-name="utility:close" alternative-text={label.Close} variant="inverse">
+          </lightning-icon>
+        </button>
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+          <span if:true={aprovalModalTitle}>
+            {aprovalModalTitle}
+          </span>
+        </h2>
+      </header>
+
+      <div class="slds-modal__content slds-p-around_medium slds-is-relative">
+        <span>
+          <lightning-spinner alternative-text="Loading" size="medium" variant="brand"
+            if:true={showApprovalWindowSpinner}></lightning-spinner>
+        </span>
+
+        <!--
+					Comments!
+				-->
+        <div class={commentsFormClass}>
+          <label class="slds-form-element__label" for="textarea-id-approve-reject-comments">{label.Comments}</label>
+          <div class="slds-form-element__control">
+            <textarea id="textarea-id-approve-reject-comments" style="height:10rem;"
+              class="slds-textarea textarea-id-approve-reject-comments" placeholder="" onchange={handleCommentsChange}
+              disabled={showApprovalWindowSpinner}>
+						</textarea>
+          </div>
+        </div>
+      </div>
+
+      <footer class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick={closeApprovalWindow}
+          disabled={showApprovalWindowSpinner}>{label.Cancel}</button>
+        <!-- render buttons based on approve/reject -->
+        <button if:true={isApprove} class="slds-button slds-button_brand" onclick={handleApprovalWindowAction}
+          disabled={showApprovalWindowSpinner}>{label.Approve}</button>
+        <button if:true={isReject} class="slds-button slds-button_destructive" onclick={handleApprovalWindowAction}
+          disabled={showApprovalWindowSpinner}>{label.Reject}</button>
+        <button if:true={isReassign} class="slds-button slds-button_brand" onclick={handleApprovalWindowAction}
+          disabled={showApprovalWindowSpinner}>{label.Reassign}</button>
+      </footer>
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open" if:true={showApprovalModal}></div>
+
+</template>

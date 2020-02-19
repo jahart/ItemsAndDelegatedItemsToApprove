@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Comments__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>When checked requires comments when approving or rejecting items</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When checked requires comments when approving or rejecting items</inlineHelpText>
+    <label>Require Comments</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

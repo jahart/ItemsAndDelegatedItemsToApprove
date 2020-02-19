@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sharing_Extension__c</fullName>
+    <description>Name of the apex class implementing the callable extension to find or create sharing records by record id and user id</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Name of the apex class implementing the callable extension to find or create sharing records by record id and user id</inlineHelpText>
+    <label>Sharing Extension</label>
+    <length>120</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Items and Delegated Items to Approve Icon</description>
+    <internalUseOnly>false</internalUseOnly>
+    <name>cld-penguin_01.png</name>
+    <public>true</public>
+</Document>

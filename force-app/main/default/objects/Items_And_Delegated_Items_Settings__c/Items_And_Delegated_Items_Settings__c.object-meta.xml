@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>Settings for Items And Delegated Items To Approve</description>
+    <enableFeeds>false</enableFeeds>
+    <label>Items And Delegated Items To Approve</label>
+    <visibility>Public</visibility>
+</CustomObject>

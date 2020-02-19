@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Created by Lightning App Builder</description>
+    <flexiPage>Items_And_Delegated_Items_To_Approve</flexiPage>
+    <icon>Items_and_Delegated_Items_to_Approve/cld_penguin_01_png.png</icon>
+    <label>Items And Delegated Items To Approve</label>
+    <motif>Custom219: TV Widescreen</motif>
+</CustomTab>

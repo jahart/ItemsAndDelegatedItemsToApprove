@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Approve_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Approve Label</shortDescription>
+        <value>Approve</value>
+    </labels>
+    <labels>
+        <fullName>Assigned_By</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Assigned By</shortDescription>
+        <value>Assigned By</value>
+    </labels>
+    <labels>
+        <fullName>By_Type_To_Approve</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>By Type To Approve</shortDescription>
+        <value>By Type To Approve</value>
+    </labels>
+    <labels>
+        <fullName>Cancel_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Cancel Label</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Check_to_Include_Fields</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Check to Include Fields</shortDescription>
+        <value>Check to Include Fields</value>
+    </labels>
+    <labels>
+        <fullName>Close_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Close Label</shortDescription>
+        <value>Close</value>
+    </labels>
+    <labels>
+        <fullName>Comments_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Comments Label</shortDescription>
+        <value>Comments</value>
+    </labels>
+    <labels>
+        <fullName>Date_Submitted</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Date Submitted</shortDescription>
+        <value>Date Submitted</value>
+    </labels>
+    <labels>
+        <fullName>Delegated_Item</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Delegated Item</shortDescription>
+        <value>Delegated Item</value>
+    </labels>
+    <labels>
+        <fullName>Drag_and_Drop_to_Order</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Drag and Drop to Order</shortDescription>
+        <value>Drag and Drop to Order</value>
+    </labels>
+    <labels>
+        <fullName>Fields_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Fields Label</shortDescription>
+        <value>Fields</value>
+    </labels>
+    <labels>
+        <fullName>Filters_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Filters Label</shortDescription>
+        <value>Filters</value>
+    </labels>
+    <labels>
+        <fullName>Is_Delegated</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Is Delegated</shortDescription>
+        <value>Is Delegated</value>
+    </labels>
+    <labels>
+        <fullName>Items_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Items Label</shortDescription>
+        <value>Items</value>
+    </labels>
+    <labels>
+        <fullName>Items_and_Delegated_Items_to_Approve</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Items and Delegated Items to Approve</shortDescription>
+        <value>Items and Delegated Items to Approve</value>
+    </labels>
+    <labels>
+        <fullName>Most_Recent_Approver</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Most Recent Approver</shortDescription>
+        <value>Most Recent Approver</value>
+    </labels>
+    <labels>
+        <fullName>My_Approval_Requests</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>My Approval Requests</shortDescription>
+        <value>My Approval Requests</value>
+    </labels>
+    <labels>
+        <fullName>No_approval_requests_need_your_attention_right_now</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No approval requests need your attention right now</shortDescription>
+        <value>No approval requests need your attention right now</value>
+    </labels>
+    <labels>
+        <fullName>Reassign_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Reassign Label</shortDescription>
+        <value>Reassign</value>
+    </labels>
+    <labels>
+        <fullName>Refresh_to_view_the_latest_data</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Refresh to view the latest data</shortDescription>
+        <value>Refresh to view the latest data</value>
+    </labels>
+    <labels>
+        <fullName>Reject_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Reject Label</shortDescription>
+        <value>Reject</value>
+    </labels>
+    <labels>
+        <fullName>Related_To</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Related To</shortDescription>
+        <value>Related To</value>
+    </labels>
+    <labels>
+        <fullName>Settings_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Settings Label</shortDescription>
+        <value>Settings</value>
+    </labels>
+    <labels>
+        <fullName>Show_All_Items_To_Approve</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Show All Items To Approve</shortDescription>
+        <value>Show All Items To Approve</value>
+    </labels>
+    <labels>
+        <fullName>Show_Approval_Items</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Show Approval Items</shortDescription>
+        <value>Show Approval Items</value>
+    </labels>
+    <labels>
+        <fullName>Show_Items_Assigned_To_Me</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Show Items Assigned To Me</shortDescription>
+        <value>Show Items Assigned To Me</value>
+    </labels>
+    <labels>
+        <fullName>Show_Items_Delegated_To_Me</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Show Items Delegated To Me</shortDescription>
+        <value>Show Items Delegated To Me</value>
+    </labels>
+    <labels>
+        <fullName>Sorted_By</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Sorted By</shortDescription>
+        <value>Sorted By</value>
+    </labels>
+    <labels>
+        <fullName>Standard_Items_To_Approve</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Standard Items To Approve List View</shortDescription>
+        <value>Standard Items To Approve List View</value>
+    </labels>
+    <labels>
+        <fullName>Submitted_By</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Submitted By</shortDescription>
+        <value>Submitted By</value>
+    </labels>
+    <labels>
+        <fullName>Type_Label</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Type  Label</shortDescription>
+        <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>Type_to_filter_items</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Type to filter items</shortDescription>
+        <value>Type to filter items</value>
+    </labels>
+    <labels>
+        <fullName>View_All</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>View All</shortDescription>
+        <value>View All</value>
+    </labels>
+    <labels>
+        <fullName>View_All_Items_and_Delegated_Items</fullName>
+        <categories>Items_and_Delegated_Items_to_Approve</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>View All Items and Delegated Items</shortDescription>
+        <value>View All Items and Delegated Items</value>
+    </labels>
+</CustomLabels>

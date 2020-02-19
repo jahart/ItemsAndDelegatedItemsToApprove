@@ -1,0 +1,53 @@
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+.column-drag-elem {
+  opacity: .9;
+  border:1px solid rgb(0, 112, 210);
+}
+
+.column-over-elem {
+  border: 2px dashed rgb(0, 112, 210);
+  position: relative;
+}
+
+.heading-text-caps {
+  font-size: .75rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: .02rem;
+}
+
+.cursor-move {
+  cursor:move;
+}
+.cursor-move:hover {
+  border:1px solid rgb(0, 112, 210);
+}
+
+.datatable-container {
+  height:calc(80vh - 100px);
+}
+
+.approve-reject-link {
+  border: 1px solid #888;
+  padding-left: .2rem;
+  padding-right: .2rem;
+  padding-bottom: .2rem;
+  border-radius: 12px;
+}
+
+.emptyContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 10%;
+  margin-left: 40%;
+}
