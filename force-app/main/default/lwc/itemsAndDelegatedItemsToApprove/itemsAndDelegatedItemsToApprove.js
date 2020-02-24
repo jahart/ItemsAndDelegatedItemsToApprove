@@ -16,7 +16,6 @@ const COLUMN_LOCAL_STOREAGE_NAME = 'COLUMN_STOREAGE_NAME'
 // note global css is used to style datatable buttons to appear as url links
 const BUTTON_NAME_TO_RENDER_AS_LINK = 'datatable-button-as-link-action'
 
-
 /*
  * Lightning Web Component containing logic for supporting Items and Delegated Items to Approve
  * home page component, flexipage, and mobile page
@@ -32,12 +31,12 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   /** when true does not require comments when approving /  rejecting */
   @track requireComments = false
 
-  @track label = LABELS // imported from supporting utils
+  @track label = LABELS
   @track fetchLimit = 200
   @track fetchOffset = 0
   @track hasMore = false
   @track itemsToApprove = null
-  @track itemsFetched = false //  true when items are retrieved
+  @track itemsFetched = false
   @track filteredItemsToApprove = null
   @track filteredItemsSortedBy = null
   @track filteredItemsSortedByLabel = null
@@ -48,13 +47,13 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   // filter
   @track renderSideBarFilter = false
   @track renderSideBarColumns = false
-  @track filterItemsViewOptionValue = 'showAll' // select view optin
-  @track filterItemsTextValue = '' // text value to filter by
-  @track filteredSobjectTypeValue = 'View All' // Selected filter sobject type value
-  @track doesNotHaveSelectedRows = true // enable/disable approve and reject buttons
+  @track filterItemsViewOptionValue = 'showAll'
+  @track filterItemsTextValue = ''
+  @track filteredSobjectTypeValue = 'View All'
+  @track doesNotHaveSelectedRows = true
 
-  // ---- columns ------
-  @track baseColumnsListToRender = [ // list of all columns to render
+  // columns
+  @track baseColumnsListToRender = [
     { label: LABELS.Related_To, include: true },
     { label: LABELS.Type, include: true },
     { label: LABELS.Most_Recent_Approver, include: true },
@@ -65,15 +64,16 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   ]
   @track dragSrc  // support column dragging / dropping
 
-  // --  approval modal
-  @track showApprovalModal = false // when true renders approval modal window!
+  // approval modal
+  @track showApprovalModal = false
   @track approvalModalAction
-  @track approvalModalTitle = '' // title to render when approve / reject!
-  @track rowSelectedWorkItem //  specific work item id!
+  @track approvalModalTitle = ''
+  @track rowSelectedWorkItem
   @track isApprove = false
   @track isReject = false
   @track isReassign = false
   @track commentsFormClass = 'slds-form-element '
+
   @track showApprovalWindowSpinner = false
   @track showModalWindowSpinner = false
   @track lightningDatatableIsLoading = false
@@ -131,12 +131,9 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   wiredLookupCustomSettings({ error, data }) {
     if (data && data.items && typeof  data.items.CustomSettings !== 'undefined') {
       this.customSettings = data.items.CustomSettings
-
-      // allow or disable bulk approve / reject config
       if (typeof this.customSettings.disableBulkApproveAndReject !== 'undefined' && this.customSettings.disableBulkApproveAndReject === true) {
         this.disableBulkApproveReject = true
       }
-      //  require comments config
       if (typeof this.customSettings.requireComments !== 'undefined' && this.customSettings.requireComments === true) {
         this.requireComments = true
       }
@@ -191,9 +188,12 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     this.handleDelegteActionClick(workItemId, isDelegated)
   }
 
-  //  link to work item, sharing record with delegates
+  /*
+   * link to work item, sharing record with delegates if needed
+   */
   async handleDelegteActionClick(workItemId, isDelegated) {
-    if (typeof isDelegated !== 'undefined' && (isDelegated === 'true' || isDelegated === true)) {
+    const disableSharing = (typeof this.customSettings.disableSharing !== 'undefined' && this.customSettings.disableSharing === true) ? true : false
+    if (!disableSharing && typeof isDelegated !== 'undefined' && (isDelegated === 'true' || isDelegated === true)) {
       this.showModalWindowSpinner = true
       this.lightningDatatableIsLoading = true
       try {
@@ -206,8 +206,7 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
         this.lightningDatatableIsLoading = false
       }
     } else {
-      // not delegated, redirect to the work item
-      NavHelper.navigateToRecord(this, workItemId)
+      NavHelper.navigateToRecord(this, workItemId) // not delegated, redirect to the work item
     }
   }
 
@@ -215,10 +214,8 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
    * Action to link to the standard process instance work item
    */
   linkToStandardItemsToApprove() {
-    // TODO...MAY NEED "ITEMS TO APPROVE" LIST VIEW ID TO BE CONFIGURED!
-    // @api itemsToApproveListView = ''
+    // TODO...MAY NEED "ITEMS TO APPROVE" LIST VIEW ID TO BE CONFIGURED! // @api itemsToApproveListView = ''
     NavHelper.navigateToListView(this, 'ProcessInstanceWorkitem') //, ITEMS_TO_APPROVE_LIST_VIEW)
-    // NavHelper.navigateToListView(this, 'ProcessInstanceWorkitem', 'Items_to_Approve')
   }
 
   /*
@@ -255,7 +252,6 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     return this.renderSideBarFilter || this.renderSideBarColumns
   }
 
-  // ---- filter ------
 
   /*
    * when filter text is changed
@@ -349,16 +345,16 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   async fetchRecordsToApprove() {
     try {
       this.lightningDatatableIsLoading = true
-      const fetchLimit = (this._isHomePageComponent === true) ? 5 : (this.fetchLimit || 200) //  limit home page  to only 5 items
+      const fetchLimit = (this._isHomePageComponent === true) ? 5 : (this.fetchLimit || 200)
       const fetchOffset = this.fetchOffset || 0
       const auraResult = await APEX_fetchMyRecordsToApprove({ fetchLimit: fetchLimit, fetchOffset: fetchOffset })
 
       if (auraResult && auraResult.records && auraResult.records.length > 0) {
-        this.itemsToApprove = auraResult.records.map(record => { return { ...record } }) // transform results into items to approve!
+        this.itemsToApprove = auraResult.records.map(record => { return { ...record } })
         this.itemsToApprove = typeof this.itemsToApprove !== 'undefined' && this.itemsToApprove !== null ? this.itemsToApprove : []
-        this.filteredItemsToApprove = this.itemsToApprove // set a copy of itemsToApprove for page filtering / sorting!
+        this.filteredItemsToApprove = this.itemsToApprove
         if (typeof this.itemsToApprove !== 'undefined' && this.itemsToApprove !== null) {
-          this.sortFilteredItemsToApprove('dateSubmitted', 'asc') // initially sort data by dateSubmitted!
+          this.sortFilteredItemsToApprove('dateSubmitted', 'asc')
         }
         this.hasMore = auraResult.records.length >= this.fetchLimit
       }
@@ -383,9 +379,9 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     }
   }
 
-  //  ------- ------- ------- ------- -------
-  //  ------- columns and drag  / drop!
-  //  ------- ------- ------- ------- -------
+  /* ------- ------- ------- ------- -------
+   * datatable columns and drag/drop
+   */
   baseColumns = [
     // note global css is used to style this by name (button[name='datatable-button-as-link-action']) to look link a link!
     { label: LABELS.Related_To, fieldName: 'relatedToHref', initialWidth: "200px", sortable: true,
@@ -412,12 +408,11 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   }
 
   /*
-   * returns columns for our items to approve lighting datatable
+   *  build and return columns to render based on specified listing to render!
    */
   get lightningDatatableApprovalColumns() {
     const columnsListToRender = this.columnsListToRender
     const baseColumns = this.baseColumns
-    // build and return columns to render based on specified listing to render!
     let columns = []
     columnsListToRender.forEach(col => {
       if (col.include === true) {
@@ -450,7 +445,7 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
       }
     }
 
-    // store updated listing to local storeage and tracked base object to re-render
+    // save updated listing to local storage
     LocalStorage.setItemToJSON(COLUMN_LOCAL_STOREAGE_NAME, columnsListToRender)
     this.baseColumnsListToRender = columnsListToRender
   }
@@ -460,14 +455,11 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   onColumnFieldDrop(event) {
     const newIndex = event.currentTarget.dataset.dragIndex
     const oldIndex = event.dataTransfer.getData("text")
-
-    event.currentTarget.classList.remove('column-over-elem') //  remove style class!
-
+    event.currentTarget.classList.remove('column-over-elem')
     // re-arrange listing! move element from old index to new index in list
     let data = this.columnsListToRender
     data.splice(newIndex, 0, data.splice(oldIndex, 1)[0])
-
-    // store updated listing to local storeage and tracked base object to re-render
+    // save updated listing to local storage
     LocalStorage.setItemToJSON(COLUMN_LOCAL_STOREAGE_NAME, data)
     this.baseColumnsListToRender = data
   }
@@ -510,11 +502,7 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     this.dragSrc.classList.add('column-drag-elem')
   }
 
-  //  ------------------------------------------------------------------------
-  // -- sort
-  //  -------------------------------------- ---------------------------------
-
-  /*
+  /* ------------------------------------------------------------------------
    * The method onsort event handler for the approval lightning data table
    */
   handleFilteredItemsSort(event) {
@@ -531,10 +519,9 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
       'submittedByHref': 'submittedByName',
       'assignedHref': 'assignedName',
     }
-    // grab field to sort
     let sortField = fieldName
 
-    // when field exists in the href to name sort map, use the field value to sort by
+    // replace href sort columns with the field names
     if (hrefNameSortMap[sortField]) {
       sortField = hrefNameSortMap[sortField]
     }
@@ -551,11 +538,8 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     }
   }
 
-  //  ------------------------------------------------------------------------
-  // ---- approve / reject and modal popup
-  //  ------------------------------------------------------------------------
 
-  /**
+  /* ------------------------------------------------------------------------
    * Action  to render the approve or reject popup window from datatable row action
    */
   handleFilteredItemsRowAction(event) {
@@ -582,7 +566,6 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   handleSelectedRowAction(event) {
     const targetValue = event.target.name
     const selectedRows = this.getSelectedWorkItemRows()
-
     this.showApproveRejectModal(selectedRows, targetValue)
   }
 
@@ -620,10 +603,8 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   handleApprovalAction(event) {
     const workItemId = event.currentTarget.dataset.workItemId
     const targetValue = event.target.value
-
     const workItem = this.itemsToApprove.find(f => { return f.workItemId === workItemId })
     this.rowSelectedWorkItem = workItem
-
     this.showApproveRejectModal([workItem], targetValue)
   }
 
@@ -639,24 +620,29 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     this.isApprove = (this.approvalModalAction === 'approve' || this.approvalModalAction === 'approveAll')
     this.isReject = (this.approvalModalAction === 'reject' || this.approvalModalAction === 'rejectAll')
 
-    // collect and share the delegated items!
+    // collect and share the delegated items when opening dialog window! when sharing enabled
+    const disableSharing = (typeof this.customSettings.disableSharing !== 'undefined' && this.customSettings.disableSharing === true) ? true : false
     let delegatedItemPromises = []
-    if (typeof workItems !== 'undefined' && workItems !== null) {
+    if (!disableSharing && typeof workItems !== 'undefined' && workItems !== null) {
       workItems.forEach(item => {
         if (item.isDelegated) {
           delegatedItemPromises.push(APEX_shareApprovalTargetRecordWithMe({ workItemId: item.workItemId }))
         }
       })
     }
-    if (delegatedItemPromises.length > 0) {
+
+    if (!disableSharing && delegatedItemPromises.length > 0) {
+      this.lightningDatatableIsLoading = this.showModalWindowSpinner = true
       Promise.all(delegatedItemPromises).then(() => {
-        // eslint-disable-next-line
-        // console.log('shared?')
+        this.lightningDatatableIsLoading = this.showModalWindowSpinner = false
+        this.showApprovalModal = true
       }).catch(error => {
+        this.lightningDatatableIsLoading = this.showModalWindowSpinner = false
         ShowToast.error(this, buildErrorMessage(error))
       })
+    } else  {
+      this.showApprovalModal = true
     }
-    this.showApprovalModal = true
   }
 
   /**
@@ -710,7 +696,7 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   }
 
   /**
-   * when ok / (approve / reject / reassign) is clicked on modal
+   * when ok / (approve / reject ) is clicked on modal
    */
   async handleApprovalWindowAction() {
     const selectedWorkItem = this.getSelectedWorkItemRows()
@@ -727,13 +713,11 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
         let comments = commentsElem.value
 
         if (typeof comments === 'undefined' || comments === null || comments.trim().length <= 0) {
-          // Require Comments! unless ok to not have comments
           if (this.requireComments !== false) {
             this.commentsFormClass = 'slds-form-element slds-has-error' // no comments add error!
           }
         } else {
           this.commentsFormClass = 'slds-form-element' // has comment...no error
-          // approve or reject!
           try {
             this.showApprovalWindowSpinner = true
             await APEX_approveOrRejectItems({ workItemIds: workItemIds, approve: approve, comments: comments })
