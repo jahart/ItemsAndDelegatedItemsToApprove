@@ -1,4 +1,4 @@
-## [logo]: https://github.com/jahart/ItemsAndDelegatedItemsToApprove/blob/master/force-app/main/default/documents/Items_and_Delegated_Items_to_Approve/cld_penguin_01_png.png "Items and Delegated Items to Approve" Items and Delegated Items to Approve
+## [logo]: https://raw.githubusercontent.com/jahart/ItemsAndDelegatedItemsToApprove/master/force-app/main/default/documents/Items_and_Delegated_Items_to_Approve/cld_penguin_01_png.png?token=AAFOJGXMHZLHD7H3KZDRCCK6KP5R6 "Items and Delegated Items to Approve" Items and Delegated Items to Approve
 
 Lightning Web Components and Apex to provide an optional replacement, or companion, to the salesforce standard items to approve component.
 
