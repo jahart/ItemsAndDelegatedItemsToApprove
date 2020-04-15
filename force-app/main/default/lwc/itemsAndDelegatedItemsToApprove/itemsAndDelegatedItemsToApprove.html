@@ -1,14 +1,14 @@
 <template>
   <!--
-		Template for home page component
-	-->
+    Template for home page component
+  -->
   <template if:true={isHomePageComponent}>
     <lightning-card>
       <div slot="title">
         <div class="slds-media slds-p-bottom_xx-small ">
           <div class="slds-media__figure" style="margin-right:0;">
             <!-- cld! penguin! -->
-            <div class="ccontainer" style="width:3rem">
+            <div class="container" style="width:3rem">
               <img src={cldPenguinUrl} style="max-height:40px">
             </div>
           </div>
@@ -21,9 +21,6 @@
         </div>
       </div>
 
-      <!--
-				list the items to approve in the card body
-			-->
       <div class="slds-card__body slds-card__body_inner slds-is-relative">
         <lightning-spinner alternative-text="Loading" size="medium" variant="brand" if:true={showModalWindowSpinner}>
         </lightning-spinner>
@@ -37,13 +34,11 @@
         </template>
 
         <ul class="pendingApprovalCardList">
-          <li
-            class="pending-approval-card-row slds-tile slds-hint-parent runtime_approval_processPendingApprovalCardRow"
+          <li class="pending-approval-card-row slds-tile slds-hint-parent runtime_approval_processPendingApprovalCardRow"
             for:each={itemsToApprove} for:item="item" key={item.workItemId} for:index="index">
 
             <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
               <h3 class="slds-truncate">
-                <!-- <a href={item.workItemHref} title={item.relatedToName}>{item.relatedToName}</a> -->
                 <a onclick={handleMobileActionClick} data-work-item-id={item.workItemId} data-is-delegated={item.isDelegated}>
                   {item.relatedToName}
                 </a>
@@ -53,21 +48,13 @@
                   <!-- actions per item to approve! -->
                   <lightning-button-menu slot="actions" menu-alignment="auto" variant="bare"
                     class="slds-border_top slds-border_bottom slds-border_left slds-border_right">
-                    <!--
-											approve
-										-->
+
                     <lightning-menu-item value="approve" label={label.Approve} onclick={handleApprovalAction}
                       data-work-item-id={item.workItemId}></lightning-menu-item>
-                    <!--
-											reject
-										-->
+
                     <lightning-menu-item value="reject" label={label.Reject} onclick={handleApprovalAction}
                       data-work-item-id={item.workItemId}></lightning-menu-item>
-                    <!--
-											reassign ???
-										-->
-                    <!-- <lightning-menu-item value="reassign" label="Reassign" onclick={handleApprovalAction} data-work-item-id={item.workItemId}></lightning-menu-item> -->
-                    <!-- <lightning-menu-item value="reassign" label="Reassign" href={item.workItemHref}></lightning-menu-item> -->
+
                   </lightning-button-menu>
                 </div>
               </div>
@@ -87,7 +74,6 @@
       </div>
       <div slot="footer">
         <div class="slds-text-align_center">
-          <!-- link to flexipage to render all??  should this be a property? -->
           <a href={viewAllFlexipageUrl}>
             {label.View_All_Items_and_Delegated_Items}
           </a>
@@ -95,17 +81,17 @@
       </div>
     </lightning-card>
   </template>
-  <!--
-		end isHomePageComponent
-  -->
 
+  <!--
+    mobile template
+  -->
   <template if:true={isMobilePageComponent}>
     <div class="xslds-theme_default slds-p-around_medium slds-border_bottom">
       <lightning-spinner alternative-text="Loading" size="medium" variant="brand" if:true={showModalWindowSpinner}>
       </lightning-spinner>
       <div class="slds-media xslds-p-bottom_xx-small">
         <div class="slds-media__figure" style="margin-right:0;">
-          <div class="ccontainer" style="width:3rem">
+          <div class="container" style="width:3rem">
             <img src={cldPenguinUrl} style="max-height:40px">
           </div>
         </div>
@@ -161,17 +147,14 @@
   </template>
 
   <!--
-		Template for DESKTOP! / FLEXIPAGE
-	-->
+    Flexipage Template
+  -->
   <template if:true={isFlexiPageComponent}>
 
     <div class="slds-page-header flexipage-template slds-hide">
       <div class="slds-media">
         <div class="slds-media__figure" style="margin-right:-4px;margin-left:-15px;">
-
-          <!-- <lightning-icon icon-name="custom:custom90"></lightning-icon> -->
           <img src={cldPenguinUrl} style="max-height:40px">
-
         </div>
         <div class="slds-media__body">
           <div class="slds-grid">
@@ -246,7 +229,6 @@
         </div>
 
         <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
-
           <div class="slds-p-right_x-small">
             <lightning-input type="search" placeholder={label.Type_to_filter_items} class="filter-items-text"
               value={filterItemsTextValue} variant="label-hidden" onchange={handleFilterItemsTextChange}>
@@ -279,9 +261,7 @@
       </div>
     </div>
 
-    <div
-      class="slds-theme_default slds-grid listDisplays safari-workaround-anchor slds-border_right slds-border_left slds-is-relative">
-
+    <div class="slds-theme_default slds-grid listDisplays safari-workaround-anchor slds-border_right slds-border_left slds-is-relative">
       <span class="">
         <lightning-spinner alternative-text="Loading" size="large" variant="brand"
           if:true={lightningDatatableIsLoading}>
@@ -291,18 +271,18 @@
       <div class="slds-grid listViewContainer safari-workaround">
         <!--
           datatable
-				-->
+        -->
         <div class="slds-col slds-no-space forceListViewManagerPrimaryDisplayManager">
 
           <div class="datatable-container">
-            <lightning-datatable show-row-number-column hide-checkbox-column={hideMultipleCheckColumn}
+            <lightning-datatable show-row-number-column resize-column-disabled
+              hide-checkbox-column={hideMultipleCheckColumn}
               key-field="workItemId" class="appoval-datatable-container" data={filteredItemsToApprove}
               columns={lightningDatatableApprovalColumns} sorted-by={filteredItemsSortedBy}
               sorted-direction={filteredItemsSortedDirection} onsort={handleFilteredItemsSort}
               onrowaction={handleFilteredItemsRowAction} onrowselection={handleRowSelection}
               selected-rows={initialSelectedRows}>
             </lightning-datatable>
-
 
             <template if:false={itemsToApprove}>
               <template if:true={itemsFetched}>
@@ -313,20 +293,13 @@
                 </div>
               </template>
             </template>
-
           </div>
-
         </div>
-        <!--
-					side bar!
-				-->
-        <div class="slds-grid slds-no-flex forceListViewManagerSecondaryDisplayManager" if:true={renderSideBar}>
 
-          <!--
-					 panel for filter!
-					-->
-          <div
-            class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-grid slds-grid_vertical forceFilterPanel"
+        <!-- side bar! -->
+        <div class="slds-grid slds-no-flex forceListViewManagerSecondaryDisplayManager absolute-side-bar">
+          <!-- panel for filter! -->
+          <div class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-grid slds-grid_vertical forceFilterPanel"
             if:true={renderSideBarFilter}>
             <div class="slds-panel__header panelHeader">
               <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate">{label.Filters}</h2>
@@ -339,7 +312,6 @@
             <div class="slds-panel__body">
               <ol>
                 <li>
-                  <!-- show all  / view mine / view delegated! options-->
                   <div class="slds-box xslds-theme_shade">
                     <lightning-combobox name="filterItemsViewOptionVale" label={label.Show_Approval_Items}
                       value={filterItemsViewOptionValue} options={filterItemsViewOptions}
@@ -349,7 +321,6 @@
                 </li>
 
                 <li class="slds-m-top_medium" if:true={itemsToApprove}>
-                  <!-- show sobject types to sort by -->
                   <div class="slds-box xslds-theme_shade">
                     <lightning-combobox name="filterItemsByType" label={label.By_Type_To_Approve}
                       value={filteredSobjectTypeValue} options={filterSobjectTypeOptions}
@@ -361,9 +332,7 @@
             </div>
           </div>
 
-          <!--
-					 panel for columns / settings!
-					-->
+          <!-- panel for columns / settings! -->
           <div
             class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-grid slds-grid_vertical forceFilterPanel"
             if:true={renderSideBarColumns}>
@@ -410,13 +379,12 @@
   </template>
 
   <!--
-		approve / reject modal!
-	-->
+    approve / reject modal!
+  -->
   <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" if:true={showApprovalModal}>
     <div class="slds-modal__container">
       <header class="slds-modal__header">
-        <!-- render header close button -->
         <button onclick={closeApprovalWindow}
           class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title={label.Close}>
           <lightning-icon size="small" icon-name="utility:close" alternative-text={label.Close} variant="inverse">
@@ -435,16 +403,14 @@
             if:true={showApprovalWindowSpinner}></lightning-spinner>
         </span>
 
-        <!--
-					Comments!
-				-->
+        <!-- Comments! -->
         <div class={commentsFormClass}>
           <label class="slds-form-element__label" for="textarea-id-approve-reject-comments">{label.Comments}</label>
           <div class="slds-form-element__control">
             <textarea id="textarea-id-approve-reject-comments" style="height:10rem;"
               class="slds-textarea textarea-id-approve-reject-comments" placeholder="" onchange={handleCommentsChange}
               disabled={showApprovalWindowSpinner}>
-						</textarea>
+            </textarea>
           </div>
         </div>
       </div>

@@ -16,8 +16,7 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
    *
    *	@param {fetchLimit}  - represents limit of records to return
    *  @param {fetchLimit]  - represents offset
-   *
-   *  Returns AuraResult records of pending approval items
+   *  @return AuraResult records of pending approval items
    */
   @AuraEnabled
   public static AuraResult fetchMyRecordsToApprove(Integer fetchLimit, Integer fetchOffset) {
@@ -31,14 +30,13 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
     return auraResult;
   }
 
-  /*
+  /**
    * Approve or Reject items
    *
-   * @param {workItemId[]} - List of Ids of work item records to approve or reject
-   * @param {approve} - Boolean indicator to approve or reject (approve when true, rejects when false)
+   * @param {workItemIds} - List of work item record ids to approve or reject
+   * @param {approve} - Boolean indicator to approve or reject (approve when true, reject when false)
    * @param {comments} - String value for approval or rejection reasons
-   *
-   * returns AuraResult containing the Approval.ProcessResult item
+   * @return AuraResult containing the Approval.ProcessResult item
    */
   @AuraEnabled
   public static AuraResult approveOrRejectItems(Id[] workItemIds, Boolean approve, String comments) {
@@ -68,17 +66,17 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
     return auraResult;
   }
 
-  /*
+  /**
    * Shares the approval target item object with the current user
    *
-   * @param {workItemId} - Id of the work item related to the target object to share
-   * with current user!
+   * @param {workItemId} - work item id for related object to share with current user
+   * @return AuraResult including the sharing record id
    */
   @AuraEnabled
   public static AuraResult shareApprovalTargetRecordWithMe(String workItemId) {
     AuraResult auraResult = new AuraResult();
 
-    // retrieve related target object id from the workitem and creates a share record if needed
+    // retrieve related target object id from the workitem
     Id targetObjectId = queryForWorkItemTargetObjectId(workItemId);
     Id currentUserId = UserInfo.getUserId();
 
@@ -89,7 +87,8 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
   }
 
   /**
-   * shares the settings with the component
+   * Provides the custom settings to the component
+   * @return AuraResult
    */
   @AuraEnabled(cacheable=true)
   public static AuraResult lookupCustomSettings() {
@@ -143,11 +142,11 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
   }
 
   /*
-    * Wrapper class representing User Pending Approval details
+   * Wrapper class representing User Pending Approval details
    * returned as result records in fetchMyRecordsToApprove
    */
   public class PendingApprovalRecord {
-    @AuraEnabled public Id workItemId {get; set;} /** Id of the underlying ProcessInstanceWorkItem object */
+    @AuraEnabled public Id workItemId {get; set;}
     @AuraEnabled public String workItemHref {get; set;}
     @AuraEnabled public String relatedToId  {get; set;}
     @AuraEnabled public String relatedToName  {get; set;}
@@ -188,12 +187,14 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
   }
 
   /**
-   * Returns the user ids includeing: the current user, the id's for queues or
-   * groups the current user belongs, and the ids of users where the current user
-   * is the delegated user.
+   * When the custom setting 'Show Delegate Items Only' is not checked:
+   * Returns id for the current user, the id's for queues the current user
+   * belongs, and ids of users where the current user is the delegated approver.
    *
-   * When the custom settings 'Show Delegated Items Only' is checked,
-   * results are limited to delegating user ids
+   * When the custom setting 'Show Delegate Items Only' is checked:
+   * Results are limited to only  ids of users where the current user is the delegated approver
+   *
+   * @return user ids of process items to query
    */
   private static Set<Id> getCurrentUserGroupsAndDelegateIds () {
     // check custom setting to see if we should limit to only delegate users
@@ -360,29 +361,32 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
    * Executes the configured or default sharing extension
    */
   public static Object runSharingExtension(Id recordId, Id userId) {
-    Object objRslt = null;
+    Object sharingExtensionResults = null;
     Boolean disableSharinig = false;
     Callable extension = null;
 
-    // Lookup custom setting to get configured sharing extension class to call or if sharing is disabled
-    if (configSettings != null && String.isNotEmpty(configSettings.Sharing_Extension__c)) {
+    // check configs  to see if sharing is disabled or has a custom extension
+    if (configSettings != null) {
       disableSharinig = configSettings.Disable_Sharing__c;
-      String shairingExtension = configSettings.Sharing_Extension__c;
-      if (disableSharinig != true && String.isNotEmpty(shairingExtension)) {
-        extension = (Callable) Type.forName(shairingExtension).newInstance();
+      if (String.isNotEmpty(configSettings.Sharing_Extension__c)) {
+        String shairingExtension = configSettings.Sharing_Extension__c;
+        if (disableSharinig != true && String.isNotEmpty(shairingExtension)) {
+          extension = (Callable) Type.forName(shairingExtension).newInstance();
+        }
       }
     }
 
     if (disableSharinig != true) {
       // use extension class from custom setting or default if no custom setting value exists
       extension = extension != null ? extension : new DefaultSharingExtension();
-      objRslt = extension.call('findOrCreateSharingRecord', new Map<String, Object> {
+      sharingExtensionResults = extension.call('findOrCreateSharingRecord', new Map<String, Object> {
         'recordId' => recordId,
         'userId' => userId
       });
     }
-    return objRslt;
+    return sharingExtensionResults;
   }
+
 
   /**
    * Default Sharing Extension.  Called when no sharing extensions are configured
@@ -401,10 +405,19 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
       if (action == 'findOrCreateSharingRecord' && args.containsKey('recordId') && args.containsKey('userId')) {
         Id recordId = Id.valueOf(String.valueOf(args.get('recordId')));
         Id userId = Id.valueOf(String.valueOf(args.get('userId')));
-
         result = findOrCreateSharingRecord(recordId, userId);
       }
       return result;
+    }
+
+    /**
+     * Cache global describe calls to only one per transaction
+     */
+    public Map<String, SObjectType> globalDescribe {
+      get { if (globalDescribe ==  null) { globalDescribe = Schema.getGlobalDescribe(); }
+        return globalDescribe;
+      }
+      private set;
     }
 
     /*
@@ -438,7 +451,7 @@ public without sharing class ItemsAndDelegatedItemsToApprove {
       // see if the sharing object, by name (should be AccountShare or Custom__Share or pse__Proj__Share)
       // exists, when it does query for existing records, otherwise insert a new one
       String objectShareName = objectName + 'Share';
-      Schema.SObjectType targetShareType = Schema.getGlobalDescribe().get(objectShareName);
+      Schema.SObjectType targetShareType = globalDescribe.get(objectShareName);
       if (targetShareType != null) {
         // build soql to query for share records....
         String[] sharedFieldNames = new String[]{

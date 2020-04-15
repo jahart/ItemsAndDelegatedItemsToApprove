@@ -51,3 +51,10 @@
   margin-top: 10%;
   margin-left: 40%;
 }
+
+.absolute-side-bar {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  overflow: scroll;
+}

@@ -194,9 +194,9 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   async handleDelegteActionClick(workItemId, isDelegated) {
     const disableSharing = (typeof this.customSettings.disableSharing !== 'undefined' && this.customSettings.disableSharing === true) ? true : false
     if (!disableSharing && typeof isDelegated !== 'undefined' && (isDelegated === 'true' || isDelegated === true)) {
-      this.showModalWindowSpinner = true
-      this.lightningDatatableIsLoading = true
       try {
+        this.showModalWindowSpinner = true
+        this.lightningDatatableIsLoading = true
         await APEX_shareApprovalTargetRecordWithMe({ workItemId: workItemId })
         NavHelper.navigateToRecord(this, workItemId)
       } catch (error) {
@@ -379,20 +379,20 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
     }
   }
 
-  /* ------- ------- ------- ------- -------
+  /* -----------------------------------
    * datatable columns and drag/drop
    */
   baseColumns = [
     // note global css is used to style this by name (button[name='datatable-button-as-link-action']) to look link a link!
-    { label: LABELS.Related_To, fieldName: 'relatedToHref', initialWidth: "200px", sortable: true,
-      type: "button", typeAttributes: { label: { fieldName: 'relatedToName' }, name: BUTTON_NAME_TO_RENDER_AS_LINK, title: { fieldName: 'relatedToName'} } },
-
-    { label: LABELS.Type, fieldName: 'sobjectType', initialWidth: "150px", sortable: true, type: 'text' },
-    { label: LABELS.Most_Recent_Approver, fieldName: 'mostRecentApproverHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'mostRecentApproverName' } } },
-    { label: LABELS.Date_Submitted, fieldName: 'dateSubmitted', initialWidth: "150px", sortable: true, type: 'date-local' },
-    { label: LABELS.Submitted_By, fieldName: 'submittedByHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'submittedByName' } } },
-    { label: LABELS.Assigned_By, fieldName: 'assignedHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'assignedName' } } },
-    { label: LABELS.Is_Delegated, fieldName: 'isDelegated', sortable: true, type: 'boolean', initialWidth: "50px" }
+    {label: LABELS.Related_To, fieldName: 'relatedToHref', sortable: true,
+      type: "button", typeAttributes: { label: { fieldName: 'relatedToName' }, name: BUTTON_NAME_TO_RENDER_AS_LINK, title: { fieldName: 'relatedToName' } }
+    },
+    { label: LABELS.Type, fieldName: 'sobjectType',  sortable: true, type: 'text' },
+    { label: LABELS.Most_Recent_Approver, fieldName: 'mostRecentApproverHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'mostRecentApproverName' } } },
+    { label: LABELS.Date_Submitted, fieldName: 'dateSubmitted',  sortable: true, type: 'date-local' },
+    { label: LABELS.Submitted_By, fieldName: 'submittedByHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'submittedByName' } } },
+    { label: LABELS.Assigned_By, fieldName: 'assignedHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'assignedName' } } },
+    { label: LABELS.Is_Delegated, fieldName: 'isDelegated', sortable: true, type: 'boolean' }
   ]
 
   /*
@@ -712,10 +712,8 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
         let approve = approvalModalAction.toLowerCase() === 'approve' ? true : false
         let comments = commentsElem.value
 
-        if (typeof comments === 'undefined' || comments === null || comments.trim().length <= 0) {
-          if (this.requireComments !== false) {
-            this.commentsFormClass = 'slds-form-element slds-has-error' // no comments add error!
-          }
+        if ((typeof comments === 'undefined' || comments === null || comments.trim().length <= 0) && this.requireComments !== false) {
+          this.commentsFormClass = 'slds-form-element slds-has-error' // no comments add error!
         } else {
           this.commentsFormClass = 'slds-form-element' // has comment...no error
           try {
