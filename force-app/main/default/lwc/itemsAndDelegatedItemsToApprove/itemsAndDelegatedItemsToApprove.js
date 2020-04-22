@@ -155,7 +155,13 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
 
     // when on flexipage, register resize listener to provide dynamic height to the datatable
     if (this.isFlexiPageComponent) {
-      window.addEventListener('resize', this.adjustDatatableContainierHeight.bind(this));
+      window.addEventListener('resize', this.adjustDatatableContainierHeight)
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.isFlexiPageComponent) {
+      window.removeEventListener('resize', this.adjustDatatableContainierHeight)
     }
   }
 
@@ -369,7 +375,7 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
   /**
    * Dynamically adjust datatable container
    */
-  adjustDatatableContainierHeight() {
+  adjustDatatableContainierHeight = () => {
     if (this.isFlexiPageComponent) {
       let windowHeight = window.innerHeight
       let dcElem = this.template.querySelector('.datatable-container')
