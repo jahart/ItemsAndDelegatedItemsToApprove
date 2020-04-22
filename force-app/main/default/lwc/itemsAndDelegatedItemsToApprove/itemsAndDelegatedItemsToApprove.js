@@ -390,15 +390,15 @@ export default class ItemsAndDelegatedItemsToApprove extends NavigationMixin(Lig
    */
   baseColumns = [
     // note global css is used to style this by name (button[name='datatable-button-as-link-action']) to look link a link!
-    {label: LABELS.Related_To, fieldName: 'relatedToHref', sortable: true,
+    { label: LABELS.Related_To, fieldName: 'relatedToHref', initialWidth: "200px", sortable: true,
       type: "button", typeAttributes: { label: { fieldName: 'relatedToName' }, name: BUTTON_NAME_TO_RENDER_AS_LINK, title: { fieldName: 'relatedToName' } }
     },
-    { label: LABELS.Type, fieldName: 'sobjectType',  sortable: true, type: 'text' },
-    { label: LABELS.Most_Recent_Approver, fieldName: 'mostRecentApproverHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'mostRecentApproverName' } } },
-    { label: LABELS.Date_Submitted, fieldName: 'dateSubmitted',  sortable: true, type: 'date-local' },
-    { label: LABELS.Submitted_By, fieldName: 'submittedByHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'submittedByName' } } },
-    { label: LABELS.Assigned_By, fieldName: 'assignedHref',  sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'assignedName' } } },
-    { label: LABELS.Is_Delegated, fieldName: 'isDelegated', sortable: true, type: 'boolean' }
+    { label: LABELS.Type, fieldName: 'sobjectType', initialWidth: "150px", sortable: true, type: 'text' },
+    { label: LABELS.Most_Recent_Approver, fieldName: 'mostRecentApproverHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'mostRecentApproverName' } } },
+    { label: LABELS.Date_Submitted, fieldName: 'dateSubmitted', initialWidth: "150px", sortable: true, type: 'date-local' },
+    { label: LABELS.Submitted_By, fieldName: 'submittedByHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'submittedByName' } } },
+    { label: LABELS.Assigned_By, fieldName: 'assignedHref', initialWidth: "150px", sortable: true, type: 'url', typeAttributes: { label: { fieldName: 'assignedName' } } },
+    { label: LABELS.Is_Delegated, fieldName: 'isDelegated', sortable: true, type: 'boolean', initialWidth: "50px" }
   ]
 
   /*
